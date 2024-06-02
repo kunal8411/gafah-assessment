@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import API from '../../services/api';
+import API from '../services/api';
 
 const CompanyList: React.FC = () => {
   const [companies, setCompanies] = useState([]);
