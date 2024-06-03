@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.model';
+import  User  from '../models/user.model';
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password, role, designation, company } = req.body;
@@ -31,6 +31,6 @@ export const login = async (req: Request, res: Response) => {
   const validPass = await bcrypt.compare(password, user.password);
   if (!validPass) return res.status(400).send('Invalid password');
 
-  const token = jwt.sign({ _id: user._id, role: user.role }, 'secretkey'); // Replace 'secretkey' with an environment variable
-  res.header('Authorization', token).send(token);
+  const token = jwt.sign({ _id: user._id, role: user.role }, 'secretkey');
+  res.header('Authorization', token).send({token, role: user.role });
 };
