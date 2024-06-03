@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CompanyList from './pages/CompanyList';
 import HomePage from './pages/HomePage';
+import AddUserPage from './pages/AddUserPage';
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const App: React.FC = () => {
         <Route path="/assign-user" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/add-user" element={<CompanyList />} />
+        <Route path="/add-user" element={<AddUserPage />} />
       </Routes>
     </Router>
   );

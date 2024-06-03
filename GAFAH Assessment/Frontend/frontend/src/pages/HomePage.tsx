@@ -1,41 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import API from '../services/api';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import API from "../services/api";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const CompanyUserList: React.FC = () => {
   const [companies, setCompanies] = useState<any[]>([]);
+  const [showAddUserForm, setShowAddUserForm] = useState<boolean>(false);
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "client",
+    designation: "",
+    companyId: "",
+  });
   const navigate = useNavigate();
-  const userRole = localStorage.getItem('role'); // Get the user's role from local storage
+  const userRole = localStorage.getItem("role"); // Get the user's role from local storage
 
   useEffect(() => {
     const fetchCompaniesWithUsers = async () => {
       try {
-        const response = await API.get('/companies/companies-with-users');
+        const response = await API.get("/companies/companies-with-users");
         setCompanies(response.data);
       } catch (error) {
-        console.error('Error fetching companies and users:', error);
+        console.error("Error fetching companies and users:", error);
       }
     };
     fetchCompaniesWithUsers();
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
   const handleSignOut = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role'); // Remove the role from local storage
-    navigate('/login');
+    localStorage.removeItem("token");
+    localStorage.removeItem("role"); // Remove the role from local storage
+    navigate("/login");
   };
 
   const handleNavigateToAssignUser = () => {
-    navigate('/assign-user');
+    navigate("/assign-user");
   };
-
+  const handleAddUser = () => {
+    navigate("/add-user");
+  };
   const handleDeleteCompany = async (companyId: string) => {
     try {
       await API.delete(`/companies/${companyId}`);
       setCompanies(companies.filter((company) => company._id !== companyId));
     } catch (error) {
-      console.error('Error deleting company:', error);
+      console.error("Error deleting company:", error);
+    }
+  };
+
+ 
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  };
+
+  const handleAddUserSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await API.post("/users", newUser);
+      setShowAddUserForm(false);
+      // Optionally, you can refresh the companies and users list here
+    } catch (error) {
+      console.error("Error adding user:", error);
     }
   };
 
@@ -46,13 +81,15 @@ const CompanyUserList: React.FC = () => {
         <ButtonContainer>
           <Button onClick={handleSignOut}>Sign Out</Button>
           <Button onClick={handleNavigateToAssignUser}>Assign User</Button>
+          {userRole === "admin" && <Button onClick={handleAddUser}>Add User</Button>}
         </ButtonContainer>
       </Header>
+      
       {companies.map((company) => (
         <CompanyCard key={company._id}>
           <CompanyHeader>
             <CompanyName>{company.name}</CompanyName>
-            {userRole === 'admin' && (
+            {userRole === "admin" && (
               <DeleteButton onClick={() => handleDeleteCompany(company._id)}>Delete Company</DeleteButton>
             )}
           </CompanyHeader>
@@ -112,6 +149,45 @@ const Button = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+`;
+
+const AddUserForm = styled.form`
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const FormTitle = styled.h3`
+  color: #007bff;
+  margin-bottom: 10px;
+`;
+
+const FormField = styled.div`
+  margin-bottom: 15px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 `;
 
 const CompanyCard = styled.div`

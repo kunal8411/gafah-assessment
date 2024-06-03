@@ -149,9 +149,6 @@ export const loginUser = async (req: Request, res: Response) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-
-    // Optionally, you can generate a JWT token and send it back to the client for authentication
-
     res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
     console.error('Error logging in user:', error);

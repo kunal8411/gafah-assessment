@@ -9,7 +9,7 @@ export const authMiddleware = (req: any, res: Response, next: NextFunction) => {
   }
 
   try {
-    const verified = jwt.verify(token, 'secretkey'); // Replace 'secretkey' with an environment variable
+    const verified = jwt.verify(token, 'secretkey'); 
     req.user = verified;
     next();
   } catch (err) {
