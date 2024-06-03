@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import CompanyList from './pages/CompanyList';
 import HomePage from './pages/HomePage';
 import AddUserPage from './pages/AddUserPage';
+import UserListPage from './pages/UserListPage';
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/add-user" element={<AddUserPage />} />
+        <Route path="/users" element={<UserListPage />} />
       </Routes>
     </Router>
   );

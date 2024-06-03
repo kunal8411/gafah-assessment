@@ -73,7 +73,9 @@ const CompanyUserList: React.FC = () => {
       console.error("Error adding user:", error);
     }
   };
-
+const handleAllUsersList=()=>{
+  navigate("/users")
+}
   return (
     <Container>
       <Header>
@@ -81,7 +83,8 @@ const CompanyUserList: React.FC = () => {
         <ButtonContainer>
           <Button onClick={handleSignOut}>Sign Out</Button>
           <Button onClick={handleNavigateToAssignUser}>Assign User</Button>
-          {userRole === "admin" && <Button onClick={handleAddUser}>Add User</Button>}
+          {userRole === "client" && <Button onClick={handleAddUser}>Add User</Button>}
+           <Button onClick={handleAllUsersList}>Users</Button>
         </ButtonContainer>
       </Header>
       
@@ -89,7 +92,7 @@ const CompanyUserList: React.FC = () => {
         <CompanyCard key={company._id}>
           <CompanyHeader>
             <CompanyName>{company.name}</CompanyName>
-            {userRole === "admin" && (
+            {userRole === "client" && (
               <DeleteButton onClick={() => handleDeleteCompany(company._id)}>Delete Company</DeleteButton>
             )}
           </CompanyHeader>
